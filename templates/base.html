@@ -1,0 +1,105 @@
+{% load humanize %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Ka Pai | {% block title %}Home{% endblock %}</title>
+	<link rel="stylesheet" rev="stylesheet" href="{{MEDIA_URL}}css/kapaistyle.css" />
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<meta name="description" content="Ka Pai is a New Zealand timezone raid guild. We raid 7-11pm NZT three times a week." />
+	<meta name="keywords" content="ka pai, nz, new zealand, raid, raiding, guild, wow, world of warcraft, warcraft, alliance, khaz'goroth, raid guild" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	{% block head %}{% endblock %}
+	<script type="text/javascript">
+		{% block head_js %}{% endblock %}
+	</script>
+</head>
+<body>
+	<div id="content-wrapper">
+		<table class="layout-table">
+			<tr>
+				<td id="header">
+					<span class="hide">tom.net.nz</span>
+					<div id="nav">
+						{% block nav %}<a href="{% url kapai_django.index.views.index %}">home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.progression.views.index %}">progression</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.gallery.views.index %}">gallery</a>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}<a href="/charter/">charter</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/forums/">forums</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/apply/">apply</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.raidtool.views.index %}">raid tool</a>
+					{% if user.is_authenticated %}
+						<br />
+						<br />
+						Welcome, <strong>{{ user.username }}!</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url django.contrib.auth.views.logout %}">logout</a>
+					{% endif %}
+					</div>
+					<div id="guild-blurb">Ka Pai is a New Zealand timezone World of Warcraft raid guild based on Khaz’goroth Alliance. 
+						We raid 7-11pm NZT three times a week. Please view recruitment information below and <a href="/apply">apply</a> if 
+						you are interested in joining us.</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="content-cell">
+					<table id="content-table">
+						<tr>
+							<td id="left-border"></td>
+							<td id="left-content" class="content">
+								{% block content %}{% endblock %}
+							</td>
+							<td id="right-content" class="content">
+								{% if show_side_recruitment %}
+								<div class="right-box">
+									<h1 id="recruitment-head"><span class="hide">Recruitment</span></h1>
+									<p>We are currently actively recruiting the following classes:</p>
+									<table class="side-box">
+									{% for rec in recruitment_classes.get_active %}
+										<tr>
+											<td style="padding-right: 10px; line-height: 17px;">
+												{% if rec.image_url %}<img src="{{ MEDIA_URL }}{{ rec.image_url }}" alt="{{ rec.name }}">{% endif %}
+												<strong>{{ rec.name }}</strong>
+											</td>
+											<td>{{ rec.requirements }}</td>
+										</tr>
+									{% endfor %}
+									</table>
+									<p><a href="/forums/viewforum.php?f=7">Click here</a> to apply!</p>
+									<p style="margin-bottom: 0" class="right-box-bottom"></p>
+								</div>
+								{% endif %}
+								{% if show_side_progression %}
+								<div class="right-box">
+									<h1 id="progression-head"><span class="hide">Progression</span></h1>
+									<p>View detailed boss progression in Wrath of the Lich King to date <a href="/progression/">here</a>.</p>
+								{% for instance in instances.get_current %}
+									<p style="line-height: 23px"><strong>{{ instance.name }}</strong></p>
+									<table class="side-box">
+									{% for boss in instance.boss_set.get_active %}
+										<tr>
+											<td{% if forloop.first %} style="width: 100px"{% endif %}>{{ boss.name }}</td>
+											<td>
+												{% if boss.cleared_date %}{{ boss.cleared_date|naturalday:"d M y" }}{% endif %}
+											</td>
+										</tr>
+									{% endfor %}
+									</table>
+								{% endfor %}
+									<p style="margin-bottom: 0" class="right-box-bottom"></p>
+								</div>
+								{% endif %}
+							</td>
+							<td id="right-border"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer"></td>
+			</tr>
+		</table>
+	</div>
+<script src="http://static.wowhead.com/widgets/power.js"></script> 
+<script type="text/javascript"> 
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script> 
+<script type="text/javascript"> 
+try {
+var pageTracker = _gat._getTracker("UA-10652088-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

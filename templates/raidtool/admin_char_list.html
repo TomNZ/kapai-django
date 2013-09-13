@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool | Encounter List{% endblock %}
+
+{% block content %}
+{# Spaceless as this is a large page #}
+{% spaceless %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; Character List</h1>
+								<p>The following is a list of all the characters that the system knows about. Click on any character to view/edit its details.</p>
+								<ul>
+								{% for char in chars %}
+									<li><a href="{% url kapai_django.raidtool.views.char_view char_id=char.id %}">{% include "raidtool/char_nameplate.html" %}</a></li>
+								{% endfor %}
+								</ul>
+{% endspaceless %}
+{% endblock %}

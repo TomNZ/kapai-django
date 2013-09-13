@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; Edit {% include "raidtool/char_nameplate.html" %}</h1>
+								<p>You can modify the character's properties below, or <a href="{% url kapai_django.raidtool.views.char_view char_id=char.id %}">go back</a>. You can also edit this character's <a href="{% url kapai_django.raidtool.views.char_edit_encounters char_id=char.id %}">boss encounters</a>.</p>
+								<p>Please make sure that the details accurately reflect your current spec, and that character names are spelled exactly.</p>
+								<form action="{% url kapai_django.raidtool.views.char_edit char_id=char.id %}" method="post">
+									<table class="property-table">
+										{{ form.as_table }}
+										<tr><td colspan="2"><input type="submit" value="Save" /><input type="reset" value="Reset" /></td></tr>
+									</table>
+								</form>
+{% endblock %}

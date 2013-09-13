@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; Import EPGP Data</h1>
+								{% if result %}
+								<p><strong>{{ result }}</strong></p>
+								{% endif %}
+								<p>To import data, open the main EPGP window, click Log, then Export. Copy and paste the data into the form below.</p>
+								<form action="{% url kapai_django.raidtool.views.import_epgp %}" method="post">
+									<textarea rows="2" cols="40" name="epgp_data"></textarea>
+									<p><input type="submit" value="Import"></p>
+								</form>
+{% endblock %}

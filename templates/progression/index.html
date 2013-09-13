@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Progression{% endblock %}
+{% block nav %}<a href="{% url kapai_django.index.views.index %}">home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<strong>progression</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.gallery.views.index %}">gallery</a>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}
+
+{% block content %}
+								<h1>Ka Pai Current Progression</h1>
+							{% for instance in instances.get_current %}
+								<h2>{{ instance.name }}</h2>
+								<table class="data-table">
+								{% for boss in instance.boss_set.get_active %}
+									<tr>
+										<td{% if forloop.first %} style="width: 200px"{% endif %}>
+											{{ boss.name }}
+										</td>
+										<td>
+											{% if boss.cleared_date %}{{ boss.cleared_date|naturalday:"d M y" }}{% endif %}
+										</td>
+									</tr>
+									{% for boss_detail in boss.bossdetail_set.get_important %}
+									<tr class="hardmode">
+										<td>
+											{{ boss_detail.name }}
+										</td>
+										<td>
+											{% if boss_detail.cleared_date %}{{ boss_detail.cleared_date|naturalday:"d M y" }}{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+								{% endfor %}
+								</table>
+							{% endfor %}
+								<h1>Ka Pai Archived Progression</h1>
+							{% for instance in instances.get_non_current %}
+								<h2>{{ instance.name }}</h2>
+								<table class="data-table">
+								{% for boss in instance.boss_set.get_active %}
+									<tr>
+										<td{% if forloop.first %} style="width: 200px"{% endif %}>
+											{{ boss.name }}
+										</td>
+										<td>
+											{% if boss.cleared_date %}{{ boss.cleared_date|naturalday:"d M y" }}{% endif %}
+										</td>
+									</tr>
+									{% for boss_detail in boss.bossdetail_set.get_important %}
+									<tr class="hardmode">
+										<td>
+											{{ boss_detail.name }}
+										</td>
+										<td>
+											{% if boss_detail.cleared_date %}{{ boss_detail.cleared_date|naturalday:"d M y" }}{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+								{% endfor %}
+								</table>
+							{% endfor %}
+
+{% endblock %}

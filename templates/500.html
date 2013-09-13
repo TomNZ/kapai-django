@@ -1,0 +1,46 @@
+{% load humanize %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Ka Pai | Error</title>
+	<link rel="stylesheet" rev="stylesheet" href="http://static.kapaiguild.com/css/kapaistyle.css" />
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<meta name="keywords" content="ka pai, nz, new zealand, raid, raiding, guild, wow, world of warcraft, warcraft, alliance, khaz'goroth, raid guild" />
+</head>
+<body>
+	<div id="content-wrapper">
+		<table class="layout-table">
+			<tr>
+				<td id="header">
+					<span class="hide">tom.net.nz</span>
+					<div id="nav">
+						{% block nav %}<a href="{% url kapai_django.index.views.index %}">home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.progression.views.index %}">progression</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.gallery.views.index %}">gallery</a>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}<a href="/charter/">charter</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/forums/">forums</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/apply/">apply</a>
+					</div>
+					<div id="guild-blurb">Ka Pai is a New Zealand timezone World of Warcraft raid guild based on Khaz’goroth Alliance. 
+						We raid 7-11pm NZT three times a week. Please view recruitment information below and apply if 
+						you are interested in joining us.</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="content-cell">
+					<table id="content-table">
+						<tr>
+							<td id="left-border"></td>
+							<td id="left-content" class="content">
+								<h1>Error!</h1>
+								<p>An error occured when trying to process your request. Please try something else.</p>
+							</td>
+							<td id="right-content" class="content">
+							</td>
+							<td id="right-border"></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

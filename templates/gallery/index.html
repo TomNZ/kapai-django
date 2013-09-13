@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block nav %}<a href="{% url kapai_django.index.views.index %}">home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.progression.views.index %}">progression</a>&nbsp;&nbsp;|&nbsp;&nbsp;<strong>gallery</strong>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}
+
+{% block content %}
+								<h1>Gallery</h1>
+								<ul>
+								{% for item in gallery.get_active %}
+									<li><a href="{% url kapai_django.gallery.views.viewgallery slug=item.slug %}">{{ item.name }}</a></li>
+								{% endfor %}
+								</ul>
+{% endblock %}

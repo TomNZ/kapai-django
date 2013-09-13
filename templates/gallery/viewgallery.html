@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Gallery | {{ view_gallery.name }}{% endblock %}
+{% block head %}<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.ad-gallery.js"></script>
+<link rel="stylesheet" rev="stylesheet" href="{{MEDIA_URL}}css/jquery.ad-gallery.css" />{% endblock %}
+
+{% block head_js %}
+ $(function() {
+	var galleries = $('.ad-gallery').adGallery({
+		loader_image: '{{ MEDIA_URL }}img/adgallery/loader.gif',
+		slideshow: {
+			enable: false
+		},
+		effect: 'fade',
+		callbacks: {
+			init: function() {
+				this.preloadAll();
+			}
+		}
+	});
+});
+{% endblock %}
+
+{% block nav %}<a hef="{% url kapai_django.index.views.index %}">home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.progression.views.index %}">progression</a>&nbsp;&nbsp;|&nbsp;&nbsp;<strong>gallery</strong>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}
+
+{% block content %}
+								<h1>Gallery - {{ view_gallery.name }}</h1>
+								<div class="ad-gallery">
+									<div class="ad-image-wrapper">
+									</div>
+									<div class="ad-controls">
+									</div>
+									<div class="ad-nav">
+										<div class="ad-thumbs">
+											<ul class="ad-thumb-list">
+											{% for item in view_gallery.galleryitem_set.get_active %}
+												<li>
+													<a href="{{ MEDIA_URL }}{{ item.image_url }}">
+														<img src="{{ MEDIA_URL }}{{ item.thumb_url }}" title="{{ item.name }}" longdesc="{{ item.description }}">
+													</a>
+												</li>
+											{% endfor %}
+											</ul>
+										</div>
+									</div>
+								</div>
+{% endblock %}

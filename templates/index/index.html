@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Home{% endblock %}
+{% block nav %}<strong>home</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.progression.views.index %}">progression</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url kapai_django.gallery.views.index %}">gallery</a>&nbsp;&nbsp;|&nbsp;&nbsp;{% endblock %}
+
+{% block content %}
+								<h1><img src="{{MEDIA_URL}}img/kapai/welcome.gif" alt="Welcome to Ka Pai" /></h1>
+								<p>Ka Pai strives to provide an attractive, enjoyable, and constructive raid environment. 
+									We look to progress quickly, while realising that this is just a game. We do not 
+									stress about attendance, or yell at you if something goes wrong. We recognise that 
+									teamwork and skill is just as important as gear.</p>
+								<p>We are always looking for enthusiastic, skilled members who are dedicated and willing to learn,
+									and all applications are considered, regardless of current recruitment.</p>
+								<p><a href="/apply/">Click here</a> to apply for Ka Pai.</p>
+								<p>We raid 7-11pm NZT (5-9pm Server Time) every Monday, Wednesday and Thursday.</p>
+							{% for item in news_items %}
+								<p>&nbsp;</p>
+								<h1>{{ item.title }}</h1>
+								<small>Posted {{ item.when_published|naturalday:"d M y" }}.</small>
+								{{ item.body|safe }}
+							{% endfor %}
+							{% for item in gallery_items %}
+								<p>&nbsp;</p>
+								<h1>{{ item.name }}</h1>
+								<small>Posted {{ item.uploaded_date|naturalday:"d M y" }}.</small>
+								<a href="{{ MEDIA_URL }}{{ item.large_url }}" target="_blank"><img src="{{ MEDIA_URL }}{{ item.image_url }}" alt="{{ item.name }}" /></a>
+								<p>{{ item.description|safe }}</p>
+							{% endfor %}
+								<p>&nbsp;</p>
+								<p>You can also check out more of our <a href="http://kapaiguild.com/gallery/kills/">recent kills</a></p>
+{% endblock %}
