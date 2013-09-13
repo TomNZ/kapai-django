@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool | Encounter List{% endblock %}
+
+{% block head_js %}
+    $(document).ready(function() {
+    	$("img[id^='del-']").click(function() {
+    		if (confirm('Are you sure you wish to delete this item?')) {
+	    		var row = $(this).parent('td').parent('tr');
+	    		row.fadeTo('fast', 0.5);
+	    		$.getJSON("/raid/json/char_boss/" + getId(this.id) + "/delete/", function(j) {
+	    			if (j.success) {
+	    				row.remove();
+	    			} else {
+	    				row.fadeTo('fast', 1.0);
+	    				alert('Delete failed!');
+	    			}
+	    		});
+			}
+    	});
+    });
+    
+    function getId(input) {
+    	var id = input.substring(input.indexOf('-') + 1);
+    	return id;
+    }
+{% endblock %}
+
+{% block content %}
+{# Spaceless as this is a large page #}
+{% spaceless %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; Encounter List</h1>
+								<h2>Filters</h2>
+								<p>You can filter the results either by rank, or by importing a raid list using the <a href="http://wow.curse.com/downloads/wow-addons/details/raid-list-export.aspx">Raid List Export addon</a>. To export a raid list, type <strong>/rle</strong> in-game, copy/paste the result into the box below, and hit Filter. To clear the current filter, hit Clear raid list. You can import a new raid list to overwrite the old one at any time.</p>
+								<form action="{% url kapai_django.raidtool.views.lead_list %}" method="post">
+								<table class="property-table">
+									{{ filter_form.as_table }}
+									<tr>
+										<th>Details:</th>
+										<td>Currently showing encounters for {{ char_count }} characters.</td>
+									</tr>
+									<tr>
+										<td></td><td><input type="submit" value="Filter" name="submit-filter" /> <input type="submit" value="Clear raid list" name="submit-clear" /></td>
+									</tr>
+								</table>
+								</form>
+								<br />
+								{% regroup char_bosses by boss.instance as instance_list %}
+								{% for instance in instance_list %}
+									<h1>{{ instance.grouper.name }}</h1>
+									{% regroup instance.list by boss as boss_list %}
+									{% for boss in boss_list %}
+										<h2>{{ boss.grouper.name }}</h2>
+										{% regroup boss.list by boss_detail as boss_detail_list %}
+										{% for boss_detail in boss_detail_list %}
+											<p>{% if boss_detail.grouper %}{{ boss_detail.grouper.name }}{% else %}Normal mode{% endif %}</p>
+											{% regroup boss_detail.list by char as char_list %}
+											<table class="data-table">
+											{% for char_grp in char_list %}
+												<tr>
+													{% with char_grp.list|first as char_boss %}
+													<td>
+														{% if is_admin %}<img src="{{ MEDIA_URL }}img/kapai/delete.png" id="del-{{ char_boss.pk }}" alt="Delete" class="mini-btn" />
+														&nbsp;{% endif %}
+														{% with char_grp.grouper as char %}{% if is_admin %}<a href="{% url kapai_django.raidtool.views.char_edit_encounters char_id=char.id %}">{% endif %}{% include "raidtool/char_nameplate.html" %}{% if is_admin %}</a>{% endif %}{% endwith %}
+													</td>
+													<td>
+														{{ char_boss.notes|default_if_none:"" }}
+													</td>
+													{% endwith %}
+												</tr>
+											{% endfor %}
+											</table>
+										{% endfor %}
+									{% endfor %}
+								{% endfor %}
+{% endspaceless %}
+{% endblock %}

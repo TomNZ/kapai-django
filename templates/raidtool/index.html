@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1>Welcome to the Ka Pai Raid Tool!</h1>
+								<p>Information you provide here is used by Ka Pai's raid leaders to form optimal groups for farm content, to ensure that the right people are in for each fight - be it because a character needs a particular piece of loot, or a particular achievement. It is important to keep this information up-to-date as you obtain gear and achievements.</p>
+								{% if chars %}
+								<p>You have configured the following characters (click to edit):</p>
+								{% else %}
+								<p>You have not configured any characters.</p>
+								{% endif %}
+								<ul>
+								{% for char in chars %}
+									<li><a href="{% url kapai_django.raidtool.views.char_view char_id=char.id %}">{% include "raidtool/char_nameplate.html" %}</a></li>
+								{% endfor %}
+									<li><a href="{% url kapai_django.raidtool.views.char_new %}">Add new character</a></li>
+								</ul>
+								<p>Please note that it is probably not worth putting in the time to set up your alts, as only the characters in any given raid are considered.</p>
+								{% if raid_leader or raid_admin %}
+								<h2>Raid Leader</h2>
+								<p>You have access to the following raid leader tools:</p>
+								<ul>
+									{% if raid_leader %}
+									<li><a href="{% url kapai_django.raidtool.views.lead_list %}">Encounter List</a></li>
+									{% endif %}
+									{% if raid_admin %}
+									<li><a href="{% url kapai_django.raidtool.views.import_epgp %}">Import EPGP Data</a></li>
+									<li><a href="{% url kapai_django.raidtool.views.admin_char_list %}">Character List</a></li>
+									{% endif %}
+								</ul>
+								{% endif %}
+{% endblock %}

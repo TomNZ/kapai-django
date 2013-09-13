@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1>Error</h1>
+								<p>Character invalid or not found. Please return to the <a href="{% url kapai_django.raidtool.views.index %}">Raid Tool home</a>.</p>
+{% endblock %}

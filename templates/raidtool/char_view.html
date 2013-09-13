@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; View {% include "raidtool/char_nameplate.html" %}</h1>
+								<p>You can <a href="{% url kapai_django.raidtool.views.char_edit char_id=char.id %}">edit</a> the character's details, or <a href="{% url kapai_django.raidtool.views.index %}">go back</a>.</p>
+								<table class="property-table">
+									<tr>
+										<th>Name:</th><td>{{ char.name }}</td>
+									</tr>
+									<tr>
+										<th>Class:</th><td>{{ char.char_class.name }}</td>
+									</tr>
+									<tr>
+										<th>Rank:</th><td>{{ char.get_rank_display }}</td>
+									</tr>
+									<tr>
+										<th>Main role:</th><td>{{ char.main_role.name }}</td>
+									</tr>
+								</table>
+								{% if char.characterboss_set.count > 0 %}
+								<p>Interested in bosses (<a href="{% url kapai_django.raidtool.views.char_edit_encounters char_id=char.id %}">edit</a>):</p>
+								<table class="data-table">
+									<tr>
+										<th>Instance</th><th>Boss</th><th>Encounter</th><th>Notes</th>
+									</tr>
+									{% for boss in char.characterboss_set.get_active %}
+									<tr>
+										<td>{{ boss.boss.instance.name }}</td><td>{{ boss.boss.name }}</td><td>{% if boss.boss_detail %}{{ boss.boss_detail.name }}{% else %}Normal mode{% endif %}</td><td>{{ boss.notes|default_if_none:"" }}</td>
+									</tr>
+									{% endfor %}
+									<tr>
+								</table>
+								{% else %}
+								<p><a href="{% url kapai_django.raidtool.views.char_edit_encounters char_id=char.id %}">No boss interest indicated</a>.</p>
+								{% endif %}
+{% endblock %}

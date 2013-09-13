@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block head %}<script type="text/javascript" src="{{MEDIA_URL}}js/dynamic-formset.js"></script>{% endblock %}
+
+{% block head_js %}
+	$(document).ready(function () {
+        $('.add-row').click(function() {
+    	    return addForm(this, getPrefix(this.id));
+        });
+        $('.delete-row').click(function() {
+    	    return deleteForm(this, getPrefix(this.id));
+        })
+        $("select.boss-edit").change(function(){
+        	var dropdown = $(this).parents(".dynamic-form").find(".boss-detail-edit");
+        	dropdown.find("option :first").attr('selected', 'selected');
+        	dropdown.hide();
+			$.getJSON("/progression/json/boss_detail/by_boss/" + $(this).val() + "/", function(j) {
+				var options = '<option value="">Normal mode</option>';
+				for (var i = 0; i < j.length; i++) {
+					options += '<option value="' + j[i].pk + '">' + j[i].fields.name + '</option>';
+				}
+				dropdown.html(options);
+				dropdown.find("option :first").attr('selected', 'selected');
+				dropdown.show();
+			})
+	    })
+    });
+    
+    function getPrefix(input) {
+		var prefix = input.substring(0, input.indexOf('-'));
+		return prefix;
+    }
+{% endblock %}
+
+{% block content %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; Edit encounters for <a href="{% url kapai_django.raidtool.views.char_view char_id=char.id %}">{% include "raidtool/char_nameplate.html" %}</a></h1>
+								{% if result %}<p><strong>{{ result }}</strong></p>{% endif %}
+								<p>You can modify the boss encounters you need, or <a href="{% url kapai_django.raidtool.views.char_view char_id=char.id %}">go back</a>.</p>
+								<p>Be sure to only enter encounters that give you best in slot items or achievements that you need. If you need a particular boss for loot, it's strongly recommended that you make a note of the item you need beside the encounter (e.g. "boots" or "Shiny Boots of Pwnage") to make it easier to remove old entries as you receive the loot.</p>
+								<p>If you need e.g. a heroic boss for loot, and a particular achieve, put in one row for each.</p>
+								<p>Please make sure that you come back regularly to remove bosses you are no longer interested in as you receive loot/achievements.</p>
+								<form action="{% url kapai_django.raidtool.views.char_edit_encounters char_id=char.id %}" method="post">
+								{% for instance, formset in forms.items %}
+								<h2>{{ instance.name }}</h2>
+								{{ formset.management_form }}
+								<table class="data-table" id="dynamic-formset-{{ formset.prefix }}">
+									{% for form in formset.forms %}
+									<tr class="dynamic-form">
+										<th>Boss</th><td>{{ form.boss.errors }}{{ form.boss }}</td><td>{{ form.boss_detail.errors }}{{ form.boss_detail }}</td>
+										<th>Notes</th><td>{{ form.notes.errors }}{{ form.notes }}</td>
+										<td>{{ form.DELETE.label }} {{ form.DELETE }}{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}</td>
+									</tr>
+									{% endfor %}
+									<tr>
+										<td colspan="4"><a href="javascript:void(0)" id="{{ formset.prefix }}-add-row" class="add-row">Add another</a></td>
+									</tr>
+								</table>
+								<br /><br />
+								{% endfor %}
+								<p><input type="submit" value="Save"></p>
+								</form>
+{% endblock %}

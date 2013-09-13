@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Raid Tool{% endblock %}
+
+{% block content %}
+								<h1><a href="{% url kapai_django.raidtool.views.index %}">Raid Tool</a> &gt; New character</h1>
+								<p>You can claim a character or enter new character details below, or <a href="{% url kapai_django.raidtool.views.index %}">go back</a>.</p>
+								<h2>Claim character</h2>
+								<p>There is a pretty high chance that the system already knows about your character. To claim a character, select it from the dropdown below.</p>
+								<p>If you cannot find your character, and cannot enter it from scratch below, then there is a chance someone else has already claimed your character erroneously. Contact Draenedin if this is the case. Those caught claiming others' characters might find themselves guildless. You have been warned.</p>
+								<form action="{% url kapai_django.raidtool.views.char_new %}" method="post">
+									<table class="property-table">
+										{{ claim_form.as_table }}
+										<tr><td colspan="2"><input type="submit" value="Claim" name="submit-claim"></td></tr>
+									</table>
+								</form>
+								<br />
+								<h2>Create character</h2>
+								<p>If you cannot find your character above, you can create a new character from scratch. Please make sure that the details accurately reflect your current spec, and that character names are spelled exactly (including unusual symbols).</p>
+								<form action="{% url kapai_django.raidtool.views.char_new %}" method="post">
+									<table class="property-table">
+										{{ create_form.as_table }}
+										<tr><td colspan="2"><input type="submit" value="Create" name="submit-create"></td></tr>
+									</table>
+								</form>
+{% endblock %}
