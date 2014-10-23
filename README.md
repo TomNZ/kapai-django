@@ -33,4 +33,5 @@ There are a number of features built into the project, some more custom that oth
     Then, it becomes trivial to rotate in and out characters who need gear from a given encounter, simply by looking at the encounter list
 
     As characters actually get gear, removing them from the list is a single click (plus confirmation)
+
 * Redirects - set up simple URLs such as /apply or /charter and have them redirect to forum topics etc - note that this requires some custom coding to work correctly
